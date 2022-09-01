@@ -1,15 +1,13 @@
 package com.italoramalh.mercadosample.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "Product")
 public class Product {
 
@@ -27,11 +25,11 @@ public class Product {
 
     private String imageUrl;
 
-    private int categoryId;
+    private Long categoryId;
 
     public Product(){}
 
-    public Product(String name, String description, double price, boolean available, int categoryId) {
+    public Product(String name, String description, double price, boolean available, Long categoryId) {
         this.name = name;
         this.description = description;
         this.price = price;

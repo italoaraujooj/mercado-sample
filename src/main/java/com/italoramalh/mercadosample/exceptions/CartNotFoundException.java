@@ -1,11 +1,10 @@
 package com.italoramalh.mercadosample.exceptions;
 
-public class ProductNotFoundException extends Exception{
+public class CartNotFoundException extends Exception{
 
     private static final long serialVersionUID = 1L;
 
-    public ProductNotFoundException(String msg) {
+    public CartNotFoundException(String msg) {
         super(msg);
     }
-
 }

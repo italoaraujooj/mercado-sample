@@ -1,5 +1,8 @@
 package com.italoramalh.mercadosample.services;
 
+import com.italoramalh.mercadosample.exceptions.CartNotFoundException;
+import com.italoramalh.mercadosample.exceptions.ProductNotFoundException;
+import com.italoramalh.mercadosample.exceptions.UserNotFoundException;
 import com.italoramalh.mercadosample.models.Cart;
 import com.italoramalh.mercadosample.models.Product;
 import com.italoramalh.mercadosample.models.User;
@@ -18,7 +21,7 @@ public class UserService {
     private UserRepository userRep;
 
     @Autowired
-    private ProductRepository productRep;
+    private CartService cartService;
 
     public List<User> findAll(){
         return this.userRep.findAll();
@@ -54,21 +57,16 @@ public class UserService {
         this.userRep.deleteById(id);
     }
 
-    public void addProductCartById(Long idUser, Product product){
-        if (!productRep.existsById(product.getId())){
-            productRep.save(product);
-        }
-        userRep.findById(idUser).get().addProductCart(product);
+    public Cart getCart(Long id) throws CartNotFoundException {
+        return cartService.getCart(id);
     }
 
-    public void delProductCartById(Long idUser, Product product){
-        if (productRep.existsById(product.getId())){
-            userRep.findById(idUser).get().delProductCart(product);
-        }
+
+    public void addProductCartById(Long id, Product product) throws UserNotFoundException {
+        cartService.addProductByUserId(id, product);
     }
 
-    public Cart getCart(Long id){
-        return this.userRep.findById(id).get().getCart();
+    public void delProductCartById(Long id, Product product) throws UserNotFoundException, ProductNotFoundException{
+        cartService.delProductCartById(id, product);
     }
-
 }

@@ -1,5 +1,8 @@
 package com.italoramalh.mercadosample.controllers;
 
+import com.italoramalh.mercadosample.exceptions.CartNotFoundException;
+import com.italoramalh.mercadosample.exceptions.ProductNotFoundException;
+import com.italoramalh.mercadosample.exceptions.UserNotFoundException;
 import com.italoramalh.mercadosample.models.Cart;
 import com.italoramalh.mercadosample.models.Product;
 import com.italoramalh.mercadosample.models.User;
@@ -24,24 +27,30 @@ public class UserController {
 //    public List<User> getAll(){ return this.userService.findAll();  }
 
     @GetMapping(value = "/user/{id}")
-    public ResponseEntity<?> getOne(@PathVariable Long id){
+    public ResponseEntity<User> getOne(@PathVariable Long id){
         return new ResponseEntity<User>(this.userService.getOne(id), HttpStatus.FOUND);
     }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<?> create(@RequestBody User user){
+    public ResponseEntity<User> create(@RequestBody User user){
         this.userService.save(user);
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/user/{id}/cart")
-    public ResponseEntity<?> getCart(@PathVariable Long id) {
+    public ResponseEntity<Cart> getCart(@PathVariable Long id) throws CartNotFoundException {
         return new ResponseEntity<Cart>(this.userService.getCart(id), HttpStatus.FOUND); }
 
     @PutMapping(value = "/user/{id}/cart")
-    public ResponseEntity<?> addToCart(@PathVariable Long id, @RequestBody Product product){
+    public ResponseEntity<Product> addToCart(@PathVariable Long id, @RequestBody Product product) throws UserNotFoundException {
         this.userService.addProductCartById(id, product);
         return new ResponseEntity<Product>(product, HttpStatus.OK) ;
+    }
+
+    @DeleteMapping(value = "/user/{id}/cart")
+    public ResponseEntity<Product> delFromCart(@PathVariable Long id, @RequestBody Product product) throws UserNotFoundException, ProductNotFoundException{
+        this.userService.delProductCartById(id, product);
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 
 
